@@ -116,12 +116,7 @@ export function PageTransition({
       window.scrollTo(0, 0);
       // One breath at full cover so the swap never reads as a flicker.
       await wait(120);
-      if (cancelled) return;
-      setPhase("opening");
-      await wait(OPEN_MS);
-      if (cancelled) return;
-      setPhase("idle");
-      pending.current = null;
+      if (!cancelled) setPhase("opening");
     })();
 
     return () => {
@@ -129,13 +124,31 @@ export function PageTransition({
     };
   }, [phase, pathname]);
 
+  // Opening runs in its own effect on purpose. Setting the phase from inside
+  // the effect that watches the phase re-runs that effect, whose cleanup then
+  // cancels the very continuation that was going to return the curtain to idle.
+  // The curtain would sit at "opening" forever, and a fixed full-viewport layer
+  // that never leaves swallows every click on the page.
+  useEffect(() => {
+    if (phase !== "opening") return;
+    let cancelled = false;
+    (async () => {
+      await wait(OPEN_MS);
+      if (cancelled) return;
+      setPhase("idle");
+      pending.current = null;
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [phase]);
+
   // A route that never arrives must not hold the curtain shut.
   useEffect(() => {
     if (phase !== "holding") return;
     const t = window.setTimeout(() => {
       window.scrollTo(0, 0);
       setPhase("opening");
-      window.setTimeout(() => setPhase("idle"), OPEN_MS);
     }, NAV_TIMEOUT_MS);
     return () => window.clearTimeout(t);
   }, [phase]);
@@ -159,7 +172,10 @@ export function PageTransition({
         aria-hidden
         data-phase={phase}
         className="curtain"
-        style={{ pointerEvents: phase === "idle" ? "none" : "auto" }}
+        // Only intercept while the page is actually covered. While the slats
+        // are travelling away there is nothing to protect, and leaving the
+        // layer clickable is how a stuck phase would take the whole page down.
+        style={{ pointerEvents: covered ? "auto" : "none" }}
       >
         {Array.from({ length: SLATS }, (_, i) => (
           <span

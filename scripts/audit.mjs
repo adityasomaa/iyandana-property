@@ -84,6 +84,18 @@ const record = (name, ok, detail = "") => {
 `);
 };
 
+/**
+ * Sections can be run individually with AUDIT_ONLY, e.g.
+ *   AUDIT_ONLY=listbox,lightbox node scripts/audit.mjs <url>
+ * The full suite takes several minutes, and some environments reap a process
+ * that long, so being able to run it in parts keeps the report complete.
+ */
+const ONLY = (process.env.AUDIT_ONLY ?? "")
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
+const want = (label) => ONLY.length === 0 || ONLY.includes(label);
+
 const step = (label) => appendFileSync(REPORT, `--- ${label}
 `);
 
@@ -157,9 +169,8 @@ const newPage = async (viewport = VIEWPORTS[2]) => {
 
 /* ------------------------------------------------- 1. routes and requests */
 
-step("routes");
-
-{
+if (want("routes")) {
+  step("routes");
   const page = await newPage();
   const failedRequests = [];
   const consoleErrors = [];
@@ -204,9 +215,8 @@ step("routes");
 
 /* --------------------------------------------------------- 2. broken images */
 
-step("images");
-
-{
+if (want("images")) {
+  step("images");
   const page = await newPage();
   const broken = [];
   for (const route of ["/id", "/id/listing", "/id/listing/ip-vl-003", "/id/konstruksi"]) {
@@ -237,11 +247,10 @@ step("images");
 }
 
 /* ----------------------------------------------------- 3. horizontal overflow
-
-step("overflow");
  * Reported per element, so a failure names the offender instead of the page. */
 
-{
+if (want("overflow")) {
+  step("overflow");
   const offenders = [];
   for (const viewport of VIEWPORTS) {
     const page = await newPage(viewport);
@@ -282,12 +291,11 @@ step("overflow");
 }
 
 /* ----------------------------------------- 3b. overflow with very long titles
-
-step("long-titles");
  * Listing titles are the longest strings on the page and the bilingual copy
  * makes them longer still, so they are tested at an extreme length. */
 
-{
+if (want("long-titles")) {
+  step("long-titles");
   const page = await newPage(VIEWPORTS[0]);
   await page.goto(`${BASE}/id/listing`, { waitUntil: "networkidle2" });
   await new Promise((r) => setTimeout(r, 1600));
@@ -305,9 +313,8 @@ step("long-titles");
 
 /* ------------------------------------ 4. nothing covers the viewport on load */
 
-step("coverage");
-
-{
+if (want("coverage")) {
+  step("coverage");
   const page = await newPage();
   await page.goto(`${BASE}/id`, { waitUntil: "domcontentloaded" });
 
@@ -367,9 +374,8 @@ step("coverage");
 
 /* --------------------------------------------------- 5. heading entrance ran */
 
-step("heading");
-
-{
+if (want("heading")) {
+  step("heading");
   const page = await newPage();
   await page.goto(`${BASE}/id`, { waitUntil: "networkidle2" });
   await new Promise((r) => setTimeout(r, 3000));
@@ -404,9 +410,8 @@ step("heading");
 
 /* ------------------------------------------------------- 6. hamburger menu */
 
-step("hamburger");
-
-{
+if (want("hamburger")) {
+  step("hamburger");
   const page = await newPage(VIEWPORTS[0]);
   await page.goto(`${BASE}/id`, { waitUntil: "networkidle2" });
   await new Promise((r) => setTimeout(r, 1600));
@@ -439,9 +444,8 @@ step("hamburger");
 
 /* -------------------------------------------------- 7. search and filtering */
 
-step("filters");
-
-{
+if (want("filters")) {
+  step("filters");
   const page = await newPage();
   await page.goto(`${BASE}/id`, { waitUntil: "networkidle2" });
   await new Promise((r) => setTimeout(r, 1600));
@@ -528,9 +532,8 @@ step("filters");
 
 /* ---------------------------------------------- 8. the custom listbox is real */
 
-step("listbox");
-
-{
+if (want("listbox")) {
+  step("listbox");
   const page = await newPage();
   await page.goto(`${BASE}/id/listing`, { waitUntil: "networkidle2" });
   await new Promise((r) => setTimeout(r, 1600));
@@ -631,9 +634,8 @@ step("listbox");
 
 /* ------------------------------------------------ 9. price input formatting */
 
-step("price-input");
-
-{
+if (want("price-input")) {
+  step("price-input");
   const page = await newPage();
   await page.goto(`${BASE}/id/listing`, { waitUntil: "networkidle2" });
   await new Promise((r) => setTimeout(r, 1600));
@@ -659,9 +661,8 @@ step("price-input");
 
 /* -------------------------------------------- 10. mobile filter panel + lock */
 
-step("filter-panel");
-
-{
+if (want("filter-panel")) {
+  step("filter-panel");
   const page = await newPage(VIEWPORTS[0]);
   await page.goto(`${BASE}/id/listing`, { waitUntil: "networkidle2" });
   await new Promise((r) => setTimeout(r, 1600));
@@ -692,9 +693,8 @@ step("filter-panel");
 
 /* ------------------------------------------------------- 11. gallery lightbox */
 
-step("lightbox");
-
-{
+if (want("lightbox")) {
+  step("lightbox");
   const page = await newPage();
   await page.goto(`${BASE}/id/listing/ip-vl-001`, { waitUntil: "networkidle2" });
   await new Promise((r) => setTimeout(r, 1600));
@@ -733,9 +733,8 @@ step("lightbox");
 
 /* ---------------------------------------------------- 12. language switching */
 
-step("language");
-
-{
+if (want("language")) {
+  step("language");
   const page = await newPage();
   await page.goto(`${BASE}/id/listing`, { waitUntil: "networkidle2" });
   await new Promise((r) => setTimeout(r, 1600));
@@ -785,9 +784,8 @@ step("language");
 
 /* --------------------------------------------------- 13. WhatsApp deep links */
 
-step("whatsapp");
-
-{
+if (want("whatsapp")) {
+  step("whatsapp");
   const page = await newPage();
 
   await page.goto(`${BASE}/id/listing/ip-rm-001`, { waitUntil: "networkidle2" });
@@ -867,9 +865,8 @@ step("whatsapp");
 
 /* ------------------------------------------------- 14. cookie consent drives */
 
-step("cookies");
-
-{
+if (want("cookies")) {
+  step("cookies");
   const page = await newPage();
   const insightRequests = [];
   page.on("request", (r) => {
@@ -923,9 +920,8 @@ step("cookies");
 
 /* ------------------------------- 15. cookie bar never covers the mobile menu */
 
-step("cookie-menu");
-
-{
+if (want("cookie-menu")) {
+  step("cookie-menu");
   const page = await newPage(VIEWPORTS[0]);
   await page.goto(`${BASE}/id`, { waitUntil: "networkidle2" });
   await new Promise((r) => setTimeout(r, 1800));
@@ -940,9 +936,8 @@ step("cookie-menu");
 
 /* ---------------------- 16. cookie bar does not swallow the floating enquiry */
 
-step("cookie-float");
-
-{
+if (want("cookie-float")) {
+  step("cookie-float");
   const page = await newPage(VIEWPORTS[0]);
   await page.goto(`${BASE}/id/listing/ip-rm-001`, { waitUntil: "networkidle2" });
   await new Promise((r) => setTimeout(r, 2000));
@@ -959,9 +954,8 @@ step("cookie-float");
 
 /* ------------------------------------------------ 17. server-side validation */
 
-step("server-validation");
-
-{
+if (want("server-validation")) {
+  step("server-validation");
   const page = await newPage();
   await page.goto(`${BASE}/id/titipkan-properti`, { waitUntil: "networkidle2" });
   await new Promise((r) => setTimeout(r, 1600));
@@ -983,9 +977,8 @@ step("server-validation");
 
 /* ------------------------------------------------- 18. structured data is valid */
 
-step("schema");
-
-{
+if (want("schema")) {
+  step("schema");
   const page = await newPage();
   await page.goto(`${BASE}/id/listing/ip-rm-001`, { waitUntil: "networkidle2" });
   const schemas = await page.evaluate(() =>
@@ -1020,9 +1013,8 @@ step("schema");
 
 /* --------------------------------------------------- 19. sitemap completeness */
 
-step("sitemap");
-
-{
+if (want("sitemap")) {
+  step("sitemap");
   const page = await newPage();
   const xml = await page.goto(`${BASE}/sitemap.xml`).then((r) => r.text());
   const urls = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
@@ -1040,9 +1032,8 @@ step("sitemap");
 
 /* --------------------------------------------------------- 20. route transition */
 
-step("transition");
-
-{
+if (want("transition")) {
+  step("transition");
   const page = await newPage();
   await page.goto(`${BASE}/id`, { waitUntil: "networkidle2" });
   await new Promise((r) => setTimeout(r, 1800));
@@ -1087,6 +1078,39 @@ step("transition");
     after.slat === "none" || after.slat.includes("matrix"),
     after.slat,
   );
+
+  // The curtain is a fixed full-viewport layer. If it is left interactive after
+  // a transition it swallows every click on the page, which is invisible in a
+  // screenshot and fatal in use.
+  const clickable = await page.evaluate(() => {
+    const link = [...document.querySelectorAll("a[href]")].find((a) => {
+      const r = a.getBoundingClientRect();
+      return r.width > 0 && r.top > 0 && r.bottom < innerHeight;
+    });
+    if (!link) return "no link in view";
+    const r = link.getBoundingClientRect();
+    const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+    if (link === hit || link.contains(hit)) return "ok";
+    return `blocked by ${hit?.tagName.toLowerCase()}.${(hit?.className || "").toString().split(" ")[0]}`;
+  });
+  record("the page is clickable after a transition", clickable === "ok", clickable);
+
+  // And a second navigation still has to work, which it cannot if the first one
+  // left the interception layer up.
+  await page.evaluate(() => {
+    const link = [...document.querySelectorAll("a")].find((a) =>
+      a.getAttribute("href")?.endsWith("/id/kontak"),
+    );
+    link?.click();
+  });
+  const deadline2 = Date.now() + 15000;
+  for (;;) {
+    const p2 = await page.evaluate(() => location.pathname);
+    if (p2 === "/id/kontak" || Date.now() > deadline2) break;
+    await new Promise((r) => setTimeout(r, 250));
+  }
+  const second = await page.evaluate(() => location.pathname);
+  record("a second transition still navigates", second === "/id/kontak", second);
   await page.close();
 }
 
