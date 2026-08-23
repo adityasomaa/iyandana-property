@@ -203,7 +203,21 @@ It checks, among other things:
 - consent actually gates the analytics request
 - the server rejects an invalid enquiry even when the client checks are bypassed
 - structured data parses and the sitemap covers every page in both languages
-- the route transition closes, swaps content under cover, resets scroll and opens
+- the route transition closes, swaps content under cover, resets scroll, opens,
+  and leaves the page clickable afterwards
+
+The suite takes several minutes. Sections can be run on their own:
+
+```bash
+AUDIT_ONLY=listbox,lightbox npm run audit -- https://iyandanaproperty.vercel.app
+```
+
+Two more scripts help when looking rather than asserting:
+
+```bash
+npm run timeline -- https://iyandanaproperty.vercel.app   # what is in front of the front page, sampled to 5s, plus the real frame values of both loaders
+npm run shots -- https://iyandanaproperty.vercel.app out  # screenshots at 375, 768 and 1440
+```
 
 ---
 

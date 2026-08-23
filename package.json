@@ -14,7 +14,9 @@
     "build:assets": "npm run build:fonts && npm run build:brand && npm run build:tiles",
     "audit": "node scripts/audit.mjs",
     "audit:contrast": "node scripts/audit-contrast.mjs",
-    "verify": "npm run typecheck && npm run audit:contrast && npm run build && npm run audit"
+    "verify": "npm run typecheck && npm run audit:contrast && npm run build && npm run audit",
+    "timeline": "node scripts/timeline.mjs",
+    "shots": "node scripts/shots.mjs"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",

@@ -54,20 +54,8 @@ export default async function Image({
           color: "#14201b",
           padding: "72px 80px",
           fontFamily: "Neue Montreal",
-          position: "relative",
         }}
       >
-        {/* The same hairline grid as the property tiles. */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            display: "flex",
-            backgroundImage:
-              "linear-gradient(to right, rgba(20,32,27,0.055) 1px, transparent 1px), linear-gradient(to bottom, rgba(20,32,27,0.055) 1px, transparent 1px)",
-            backgroundSize: "80px 80px",
-          }}
-        />
 
         <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
           <div style={{ width: 56, height: 2, backgroundColor: "#1b5e4c" }} />
