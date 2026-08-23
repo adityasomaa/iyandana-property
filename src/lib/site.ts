@@ -6,7 +6,16 @@
  * no page may claim it.
  */
 
-export const SITE_URL = "https://iyandana-property.vercel.app";
+/**
+ * The one place the canonical origin is written. Metadata, canonical links,
+ * hreflang alternates, the sitemap, robots.txt, the structured data and every
+ * WhatsApp message all read this.
+ *
+ * `iyandana-property.vercel.app` was already held by another Vercel account
+ * (409 on claim), so the project took the nearest free name, which also happens
+ * to match the client's own domain.
+ */
+export const SITE_URL = "https://iyandanaproperty.vercel.app";
 
 export const COMPANY = {
   legalName: "PT Iyan Dana Group",

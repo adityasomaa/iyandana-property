@@ -4,7 +4,13 @@ A preview site for **PT Iyan Dana Group** (Iyandana Property), Kesiman Kertalang
 Denpasar Timur. Property sales and rentals — houses, villas, land, hotels and
 commercial — with construction as a second line.
 
-Live preview: <https://iyandana-property.vercel.app>
+Live preview: <https://iyandanaproperty.vercel.app>
+Also at: <https://iyandana.onyxcreative.asia>
+
+(`iyandana-property.vercel.app` was already taken by another Vercel account, so
+the project claimed the nearest free name. `SITE_URL` in `src/lib/site.ts` is
+the single source for it, and metadata, canonicals, hreflang, the sitemap,
+robots.txt, structured data and every WhatsApp message follow from there.)
 
 This is a **design preview**, not a replacement for the client's live site. The
 existing domain `iyandanaproperty.com` has not been touched in any way.
@@ -175,7 +181,7 @@ The browser suite (`npm run audit`) drives a real Chrome and starts its own
 production server. Point it at a deployment instead by passing a URL:
 
 ```bash
-npm run audit -- https://iyandana-property.vercel.app
+npm run audit -- https://iyandanaproperty.vercel.app
 ```
 
 It checks, among other things:
