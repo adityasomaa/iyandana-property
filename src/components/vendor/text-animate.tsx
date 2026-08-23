@@ -12,6 +12,8 @@
  *     subtree and restarts the animation.
  *  3. The `AnimatePresence` wrapper is gone; nothing here ever unmounts.
  *  4. Imports come from `motion/react`, the package this project already uses.
+ *  5. Word separators are real spaces rather than `&nbsp;`, so the heading's
+ *     textContent matches the string passed in and long headlines can wrap.
  */
 
 import { cn } from "@/lib/utils"
@@ -229,7 +231,11 @@ export function TextAnimate({
         >
           {segment}
           {by === "word" && i < segments.length - 1 && (
-            <span className="inline-block">&nbsp;</span>
+            // A real space, not the original's `&nbsp;`. The wrapper carries
+            // `whitespace-pre-wrap` so it survives, it lets long headlines wrap
+            // between words, and it keeps the heading's textContent equal to
+            // the string that was passed in.
+            <span className="inline-block"> </span>
           )}
         </motion.span>
       ))}

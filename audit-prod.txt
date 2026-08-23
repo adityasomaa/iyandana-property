@@ -1,0 +1,115 @@
+--- routes
+PASS  route /  status 200
+PASS  route /id  status 200
+PASS  route /en  status 304
+PASS  route /id/listing  status 200
+PASS  route /en/listing  status 200
+PASS  route /id/listing/ip-rm-001  status 200
+PASS  route /en/listing/ip-vl-001  status 200
+PASS  route /id/konstruksi  status 200
+PASS  route /en/konstruksi  status 200
+PASS  route /id/titipkan-properti  status 200
+PASS  route /id/kontak  status 200
+PASS  route /en/kontak  status 200
+PASS  route /id/privacy  status 200
+PASS  route /id/terms  status 200
+PASS  route /sitemap.xml  status 200
+PASS  route /robots.txt  status 200
+PASS  route /id/opengraph-image  status 200
+PASS  no failed requests across all routes
+PASS  no console errors across all routes
+--- images
+PASS  zero broken images
+PASS  zero horizontal overflow at 375 / 768 / 1440
+PASS  no overflow with extreme listing titles at 375  delta 0px
+--- coverage
+PASS  nothing covers the front page from 1.5s to 5s
+PASS  hero search is visible and clickable on load  ok
+PASS  no dialog opens by itself  0 open
+--- heading
+PASS  split heading finishes visible  letters=27 minOpacity=1
+PASS  split heading announces once via aria-label  Properti dan konstruksi di Bali
+--- hamburger
+PASS  hamburger opens the menu  5 links
+PASS  mobile menu locks body scroll
+PASS  escape closes the menu
+PASS  body scroll is released on close
+PASS  focus returns to the menu button
+--- filters
+PASS  hero search reaches the listing page with its query  /id/listing?q=canggu
+PASS  keyword search returns only matching listings  1 results
+PASS  type filter returns only that type  3 results
+PASS  status filter returns only that status  6 results
+PASS  price floor narrows the results  4 results
+PASS  combined filters narrow further  1 results
+PASS  an impossible filter shows the empty state  0 results
+--- listbox
+PASS  no native select anywhere  0 found
+PASS  arrow key opens the listbox  6 options
+PASS  focus stays on the trigger
+PASS  End jumps to the last option
+PASS  Home jumps to the first option
+PASS  type-ahead moves to the matching option  Villa
+PASS  Enter commits the option and closes  ?type=villa
+PASS  Escape closes without changing the value  ?type=villa
+--- price-input
+PASS  price input groups thousands on screen  2.500.000.000
+PASS  price input sends the raw number to the query  ?min=2500000000
+--- filter-panel
+PASS  mobile filter panel opens
+PASS  filter panel locks body scroll
+PASS  filter panel sits above content  z=200
+PASS  filter panel releases scroll on close
+--- lightbox
+PASS  lightbox opens
+PASS  lightbox locks body scroll
+PASS  lightbox sits above the filter and menu layers  z=400
+PASS  arrow keys move through the gallery  Gambar 2 dari 4
+PASS  escape closes the lightbox
+PASS  lightbox releases scroll
+--- language
+PASS  language list locks body scroll while open
+PASS  language switch moves to the English path  /en/listing
+PASS  html lang follows the choice  en
+PASS  the choice is stored for later pages
+PASS  language list releases scroll
+FAIL  page content is translated  All properties
+PASS  stored language is used at the root  /en
+--- whatsapp
+PASS  detail WhatsApp link carries the listing title  Rumah dua lantai di Kesiman Kertalangu
+PASS  detail WhatsApp link carries the listing code
+PASS  detail WhatsApp link carries this page URL  Halaman: https://iyandanaproperty.vercel.app/id/listing/ip-rm-001
+PASS  every WhatsApp link names its own button  8 links
+PASS  every WhatsApp link points at wa.me
+PASS  WhatsApp links on other pages report their own URL  5 links
+PASS  WhatsApp message follows the page language
+PASS  each listing card links its own listing  14 cards
+--- cookies
+PASS  cookie bar appears on a first visit
+PASS  cookie bar uses the cookie layer token  z=500
+PASS  no analytics request before consent  0 requests
+PASS  declining dismisses the bar
+PASS  the decline is stored
+PASS  still no analytics after declining
+PASS  accepting turns statistics on  1 requests
+--- cookie-menu
+PASS  cookie bar hides while the mobile menu is open
+--- cookie-float
+PASS  floating enquiry button stays clickable with the cookie bar up  ok
+--- server-validation
+PASS  the server rejects an empty enquiry  4 fields flagged
+--- schema
+PASS  structured data parses  SingleFamilyResidence, BreadcrumbList, RealEstateAgent
+PASS  the business is described
+PASS  the listing is described with an offer
+PASS  opening hours are published
+--- sitemap
+PASS  sitemap lists every listing in both languages  28 listing urls
+PASS  sitemap covers every page  42 urls
+PASS  robots points at the sitemap  Sitemap: https://iyandanaproperty.vercel.app/sitemap.xml
+--- transition
+PASS  curtain closes on navigation  closing
+FAIL  curtain opens again  opening
+PASS  navigation completed  /id/konstruksi
+PASS  scroll reset to the top under cover  y=0
+PASS  curtain parks off screen when idle  matrix(1, 0, 0, 1, 0, -909)

@@ -1063,7 +1063,16 @@ step("transition");
   );
   record("curtain closes on navigation", ["closing", "holding"].includes(during), during);
 
-  await new Promise((r) => setTimeout(r, 3200));
+  // Poll rather than assume a duration: the sequence includes a real route
+  // fetch, which is slower against a deployment than against localhost.
+  const deadline = Date.now() + 15000;
+  for (;;) {
+    const phase = await page.evaluate(
+      () => document.querySelector(".curtain")?.getAttribute("data-phase") ?? "none",
+    );
+    if (phase === "idle" || Date.now() > deadline) break;
+    await new Promise((r) => setTimeout(r, 250));
+  }
   const after = await page.evaluate(() => ({
     phase: document.querySelector(".curtain")?.getAttribute("data-phase") ?? "none",
     path: location.pathname,
