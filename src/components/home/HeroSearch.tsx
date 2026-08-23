@@ -30,7 +30,7 @@ export function HeroSearch({ dict, locale }: { dict: Dict; locale: Locale }) {
   return (
     <form
       onSubmit={submit}
-      className="w-full border border-hair bg-surface/85 p-4 backdrop-blur-md sm:p-5"
+      className="w-full border border-hair bg-surface/95 p-4 shadow-[0_28px_70px_-40px_rgba(20,32,27,0.55)] backdrop-blur-md sm:p-5"
     >
       <h2 className="rule-label">{dict.home.searchHeading}</h2>
 

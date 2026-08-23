@@ -119,7 +119,7 @@ export function ListingCard({
         ) : null}
 
         <div className="relative z-[var(--z-raised)] flex items-center justify-between gap-3">
-          <span className="text-[0.6875rem] uppercase tracking-[0.14em] text-ink-faint">
+          <span className="whitespace-nowrap text-[0.6875rem] uppercase tracking-[0.14em] text-ink-faint">
             {listing.code}
           </span>
           <WhatsAppLink

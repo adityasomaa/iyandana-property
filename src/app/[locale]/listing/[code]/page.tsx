@@ -213,7 +213,7 @@ export default async function ListingDetailPage({ params }: Props) {
         {/* ---------------------------------------------------------- enquiry */}
         <section className="mt-20 border border-hair bg-surface p-8 sm:p-12">
           <SectionHeader
-            sectionTitle={dict.detail.sectionTitle}
+            sectionTitle={dict.contact.hero.sectionTitle}
             headline={dict.detail.askHeading}
             body={dict.detail.askBody}
             cta={

@@ -31,9 +31,15 @@ export default async function HomePage({
           Exactly one screen tall, measured in svh so the mobile browser bars
           hiding on scroll does not resize it. What is on it, above the fold
           and with nothing over it, is the property search. */}
-      <section className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden pb-16 pt-[calc(var(--header-h)+2rem)]">
+      <section className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden pb-24 pt-[calc(var(--header-h)+1.5rem)]">
         {/* The artwork is a static backdrop. It has no scroll-linked transform,
             so it never creeps or zooms as the page moves. */}
+        {/* Full-bleed artwork with a solid paper column held over the left,
+            rather than a wash over the whole frame. The wide crop keeps the
+            pavilion and the water in shot, the artwork stays at full strength
+            on the right, and the headline still sits on clean paper. Nothing
+            here is scroll-linked, so it never creeps or zooms as the page
+            moves. */}
         <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -42,28 +48,35 @@ export default async function HomePage({
             width={1600}
             height={1200}
             fetchPriority="high"
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover object-[50%_62%]"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-paper via-paper/88 to-paper/25" />
-          <div className="absolute inset-0 bg-gradient-to-t from-paper via-paper/10 to-paper/55" />
+          {/* Small screens: the copy sits over the artwork, so it is veiled. */}
+          <div className="absolute inset-0 bg-paper/80 lg:hidden" />
+          {/* Wide screens: a solid column for the copy, feathered into the art. */}
+          <div className="absolute inset-y-0 left-0 hidden w-[46%] bg-paper lg:block" />
+          <div className="absolute inset-y-0 left-[46%] hidden w-48 bg-gradient-to-r from-paper to-transparent lg:block" />
+          <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-paper to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-paper to-transparent" />
         </div>
 
-        <div className="mx-auto grid w-full max-w-[84rem] items-center gap-10 px-5 sm:px-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-16">
-          <div>
+        {/* The copy and the search sit in one column so the artwork on the
+            right is never covered by the card. It also means the small-screen
+            order is the same as the wide-screen one. */}
+        <div className="mx-auto w-full max-w-[84rem] px-5 sm:px-8">
+          <div className="max-w-[34rem]">
             <SplitText
               as="h1"
               text={dict.home.heroTitle}
-              className="max-w-[19ch] text-[clamp(2.125rem,1.15rem+3vw,3.75rem)] font-medium leading-[1.04] tracking-[-0.035em]"
+              className="text-[clamp(2.125rem,1.2rem+2.6vw,3rem)] font-medium leading-[1.04] tracking-[-0.035em]"
               delay={480}
               step={13}
             />
-            <p className="mt-7 max-w-[44ch] text-[0.9375rem] leading-relaxed text-ink-soft sm:text-base">
+            <p className="mt-6 max-w-[44ch] text-[0.9375rem] leading-relaxed text-ink-soft sm:text-base">
               {dict.home.heroLede}
             </p>
-          </div>
-
-          <div className="w-full lg:max-w-[26rem] lg:justify-self-end">
-            <HeroSearch dict={dict} locale={typed} />
+            <div className="mt-8">
+              <HeroSearch dict={dict} locale={typed} />
+            </div>
           </div>
         </div>
       </section>
